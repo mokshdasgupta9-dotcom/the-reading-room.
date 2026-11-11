@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Reading Room</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Reading Room">
+<meta name="theme-color" content="#f6efe3">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Lora:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f6efe3;--card:#fffaf0;--ink:#2e2519;--muted:#7a6a55;--accent:#8c3b2a;--accent2:#c9a45c;--line:#e2d5bd;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#1d1812;--card:#272018;--ink:#f0e6d2;--muted:#b3a287;--accent:#e08a6f;--accent2:#d4b06a;--line:#3a3024;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#1d1812;--card:#272018;--ink:#f0e6d2;--muted:#b3a287;--accent:#e08a6f;--accent2:#d4b06a;--line:#3a3024;color-scheme:dark}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Lora,Georgia,serif;line-height:1.5}
+main{max-width:760px;margin:0 auto;padding:20px 16px 60px}
+h1{font-family:"Cormorant Garamond",Georgia,serif;font-weight:600;font-size:2.4rem;margin:8px 0 0;text-align:center}
+.sub{text-align:center;color:var(--muted);font-style:italic;margin:2px 0 18px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:12px;text-align:center;padding:10px 4px}
+.stat b{display:block;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.9rem;color:var(--accent);line-height:1.1}
+.stat span{font-size:.78rem;color:var(--muted)}
+details{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:16px}
+summary{cursor:pointer;font-family:"Cormorant Garamond",Georgia,serif;font-size:1.3rem;font-weight:600;color:var(--accent)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+.grid .full{grid-column:1/-1}
+label{font-size:.8rem;color:var(--muted);display:block;margin-bottom:2px}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px}
+textarea{resize:vertical;min-height:60px}
+button{font:inherit;cursor:pointer;border-radius:8px;border:1px solid var(--accent);background:transparent;color:var(--accent);padding:6px 12px;font-size:.85rem}
+button.primary{background:var(--accent);color:var(--bg)}
+button:hover{opacity:.85}
+.tabs{display:flex;gap:6px;overflow-x:auto;margin-bottom:14px;padding-bottom:2px}
+.tabs button{white-space:nowrap;border-color:var(--line);color:var(--muted)}
+.tabs button.on{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.book{background:var(--card);border:1px solid var(--line);border-left:5px solid var(--accent2);border-radius:12px;padding:12px 14px;margin-bottom:12px}
+.book.done{border-left-color:var(--accent)}
+.book h3{font-family:"Cormorant Garamond",Georgia,serif;font-size:1.4rem;margin:0;line-height:1.2}
+.meta{color:var(--muted);font-size:.85rem}
+.note{font-style:italic;margin:6px 0 0;font-size:.92rem}
+.bar{height:8px;background:var(--line);border-radius:6px;overflow:hidden;margin:10px 0 6px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent2),var(--accent))}
+.row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:8px}
+.row input{width:90px}
+.stars button{border:none;padding:0 2px;font-size:1.3rem;color:var(--line)}
+.stars button.on{color:var(--accent2)}
+.empty{text-align:center;color:var(--muted);font-style:italic;padding:30px 10px}
+.danger{border-color:var(--line);color:var(--muted)}
+.danger.sure{border-color:var(--accent);color:var(--accent)}
+</style>
+</head>
+<body>
+<main>
+<h1>The Reading Room</h1>
+<p class="sub">Every book a doorway; every page a small, lit window.</p>
+<div class="stats" id="stats"></div>
+
+<details id="formBox">
+<summary id="formTitle">Add a book to your shelf</summary>
+<div class="grid">
+<div class="full"><label for="f-title">Title</label><input id="f-title"></div>
+<div><label for="f-author">Author</label><input id="f-author"></div>
+<div><label for="f-pages">Total pages</label><input id="f-pages" type="number" min="1" inputmode="numeric"></div>
+<div><label for="f-genre">Genre</label><input id="f-genre" placeholder="Poetry, memoir…"></div>
+<div><label for="f-status">Shelf</label><select id="f-status"><option value="want">To read</option><option value="reading">Reading now</option><option value="done">Finished</option></select></div>
+<div class="full"><label for="f-note">Notes (why this book, a line you loved…)</label><textarea id="f-note"></textarea></div>
+<div class="full"><button class="primary" id="saveBtn">Place on the shelf</button> <button id="cancelBtn" hidden>Cancel</button></div>
+</div>
+</details>
+
+<div class="tabs" id="tabs"></div>
+<div id="list"></div>
+
+<details style="margin-top:24px">
+<summary>Backup &amp; restore</summary>
+<p class="meta">Your library lives in this browser. Copy the text below somewhere safe, or paste a saved copy to restore it.</p>
+<textarea id="bk" style="min-height:90px"></textarea>
+<div class="row"><button id="exp">Show my library as text</button><button id="imp">Restore from text</button><span class="meta" id="bkmsg"></span></div>
+</details>
+</main>
+<script>
+var KEY='readingroom:v1',books=load(),tab='all',editId=null,sureId=null;
+function load(){try{var d=JSON.parse(localStorage.getItem(KEY));return Array.isArray(d)?d:[]}catch(e){return[]}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(books))}catch(e){}}
+function $(i){return document.getElementById(i)}
+function esc(s){var d=document.createElement('div');d.textContent=s==null?'':String(s);return d.innerHTML}
+function today(){return new Date().toISOString().slice(0,10)}
+function fmt(d){try{return new Date(d+'T00:00:00').toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'})}catch(e){return d}}
+var TABS=[['all','All'],['want','To read'],['reading','Reading'],['done','Finished']];
+
+function render(){
+  var done=books.filter(function(b){return b.status==='done'}),
+      cur=books.filter(function(b){return b.status==='reading'}),
+      pg=books.reduce(function(a,b){return a+(+b.page||0)},0);
+  $('stats').innerHTML='<div class="stat"><b>'+done.length+'</b><span>books finished</span></div><div class="stat"><b>'+cur.length+'</b><span>reading now</span></div><div class="stat"><b>'+pg.toLocaleString()+'</b><span>pages travelled</span></div>';
+  $('tabs').innerHTML=TABS.map(function(t){
+    var n=t[0]==='all'?books.length:books.filter(function(b){return b.status===t[0]}).length;
+    return '<button data-tab="'+t[0]+'" class="'+(tab===t[0]?'on':'')+'">'+t[1]+' ('+n+')</button>'}).join('');
+  var order={reading:0,want:1,done:2};
+  var shown=books.filter(function(b){return tab==='all'||b.status===tab}).sort(function(a,b){
+    if(tab==='done')return (b.finished||'').localeCompare(a.finished||'');
+    return order[a.status]-order[b.status]||(b.added||'').localeCompare(a.added||'')});
+  $('list').innerHTML=shown.length?shown.map(card).join(''):'<div class="empty">'+(tab==='done'?'No finished books yet — the last page awaits.':'This shelf is waiting, quiet and unhurried. Add a book above.')+'</div>';
+}
+function card(b){
+  var p=+b.pages||0,c=Math.min(+b.page||0,p||Infinity),pct=p?Math.round(c/p*100):0,h='';
+  h+='<div class="book '+(b.status==='done'?'done':'')+'"><h3>'+esc(b.title)+'</h3><div class="meta">'+esc(b.author||'Unknown author')+(p?' · '+p+' pages':'')+(b.genre?' · '+esc(b.genre):'')+'</div>';
+  if(b.note)h+='<p class="note">“'+esc(b.note)+'”</p>';
+  if(b.status==='reading'){
+    h+='<div class="bar"><i style="width:'+pct+'%"></i></div><div class="meta">Page '+c+(p?' of '+p+' · '+pct+'%':'')+'</div>';
+    h+='<div class="row"><input type="number" min="0" inputmode="numeric" id="pg-'+b.id+'" value="'+c+'" aria-label="Current page"><button data-act="setpage" data-id="'+b.id+'">Update page</button><button data-act="plus" data-id="'+b.id+'">+10</button><button class="primary" data-act="finish" data-id="'+b.id+'">Finished!</button></div>';
+  }
+  if(b.status==='want')h+='<div class="row"><button class="primary" data-act="start" data-id="'+b.id+'">Begin reading</button></div>';
+  if(b.status==='done'){
+    h+='<div class="meta">Finished '+(b.finished?fmt(b.finished):'')+'</div><div class="stars">';
+    for(var i=1;i<=5;i++)h+='<button data-act="rate" data-id="'+b.id+'" data-n="'+i+'" class="'+(i<=(b.rating||0)?'on':'')+'" aria-label="'+i+' stars">★</button>';
+    h+='</div>';
+  }
+  h+='<div class="row"><button data-act="edit" data-id="'+b.id+'">Edit</button><button class="danger '+(sureId===b.id?'sure':'')+'" data-act="del" data-id="'+b.id+'">'+(sureId===b.id?'Really remove?':'Remove')+'</button></div></div>';
+  return h;
+}
+function find(id){return books.filter(function(b){return b.id===id})[0]}
+function resetForm(){editId=null;['title','author','pages','genre','note'].forEach(function(k){$('f-'+k).value=''});$('f-status').value='want';$('formTitle').textContent='Add a book to your shelf';$('saveBtn').textContent='Place on the shelf';$('cancelBtn').hidden=true}
+$('saveBtn').onclick=function(){
+  var t=$('f-title').value.trim();if(!t){$('f-title').focus();return}
+  var d={title:t,author:$('f-author').value.trim(),pages:+$('f-pages').value||0,genre:$('f-genre').value.trim(),note:$('f-note').value.trim(),status:$('f-status').value};
+  if(editId){var b=find(editId),old=b.status;Object.assign(b,d);
+    if(d.status==='done'&&old!=='done'){b.finished=today();b.page=b.pages}
+    if(d.status!=='done'&&old==='done')b.finished=null}
+  else{d.id='b'+Date.now().toString(36)+Math.random().toString(36).slice(2,5);d.page=d.status==='done'?d.pages:0;d.added=today();d.finished=d.status==='done'?today():null;d.rating=0;books.push(d)}
+  save();resetForm();$('formBox').open=false;render();
+};
+$('cancelBtn').onclick=function(){resetForm();$('formBox').open=false};
+document.addEventListener('click',function(e){
+  var t=e.target.closest('[data-tab],[data-act]');if(!t)return;
+  if(t.dataset.tab){tab=t.dataset.tab;sureId=null;render();return}
+  var b=find(t.dataset.id),a=t.dataset.act;if(!b)return;
+  if(a!=='del')sureId=null;
+  if(a==='start'){b.status='reading'}
+  else if(a==='setpage'){var v=Math.max(0,+$('pg-'+b.id).value||0);b.page=b.pages?Math.min(v,b.pages):v}
+  else if(a==='plus'){b.page=(+b.page||0)+10;if(b.pages)b.page=Math.min(b.page,b.pages)}
+  else if(a==='finish'){b.status='done';b.page=b.pages||b.page;b.finished=today()}
+  else if(a==='rate'){b.rating=(+t.dataset.n===b.rating)?0:+t.dataset.n}
+  else if(a==='edit'){editId=b.id;$('f-title').value=b.title;$('f-author').value=b.author||'';$('f-pages').value=b.pages||'';$('f-genre').value=b.genre||'';$('f-note').value=b.note||'';$('f-status').value=b.status;$('formTitle').textContent='Edit this book';$('saveBtn').textContent='Save changes';$('cancelBtn').hidden=false;$('formBox').open=true;$('formBox').scrollIntoView({behavior:'smooth'});return}
+  else if(a==='del'){if(sureId===b.id){books=books.filter(function(x){return x!==b});sureId=null}else{sureId=b.id;render();return}}
+  save();render();
+});
+$('exp').onclick=function(){$('bk').value=JSON.stringify(books);$('bkmsg').textContent='Copy this text and keep it safe.'};
+$('imp').onclick=function(){try{var d=JSON.parse($('bk').value);if(!Array.isArray(d))throw 0;books=d;save();render();$('bkmsg').textContent='Library restored.'}catch(e){$('bkmsg').textContent='That text could not be read.'}};
+render();
+</script>
+</body>
+</html>
